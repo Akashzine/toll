@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Online Image Compression Tool">
+    <title>Image Compression Tool</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .compression-tool {
+            margin: 0 auto;
+            max-width: 600px;
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .adsense {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('compressBtn').addEventListener('click', function() {
+                const imageInput = document.getElementById('imageInput');
+                const compressionLevel = document.getElementById('compressionLevel').value;
+                const outputDiv = document.getElementById('output');
+
+                if (imageInput.files.length === 0) {
+                    alert('Please select an image file.');
+                    return;
+                }
+
+                const file = imageInput.files[0];
+                const reader = new FileReader();
+
+                reader.onload = function(event) {
+                    const img = new Image();
+                    img.src = event.target.result;
+
+                    img.onload = function() {
+                        let canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+
+                        // Set canvas dimensions based on selected compression level
+                        let quality;
+                        if (compressionLevel === 'low') quality = 0.5;
+                        else if (compressionLevel === 'medium') quality = 0.7;
+                        else quality = 0.9;
+
+                        canvas.width = img.width;
+                        canvas.height = img.height;
+                        ctx.drawImage(img, 0, 0);
+
+                        canvas.toBlob(function(blob) {
+                            const url = URL.createObjectURL(blob);
+                            const compressedImage = document.createElement('img');
+                            compressedImage.src = url;
+                            outputDiv.innerHTML = '';
+                            outputDiv.appendChild(compressedImage);
+                        }, 'image/jpeg', quality);
+                    };
+                };
+
+                reader.readAsDataURL(file);
+            });
+        });
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Image Compression Tool</h1>
+    </header>
+    <main>
+        <section class="compression-tool">
+            <h2>Compress Your Image</h2>
+            <input type="file" id="imageInput" accept="image/*">
+            <label for="compressionLevel">Select Compression Level:</label>
+            <select id="compressionLevel">
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+            </select>
+            <button id="compressBtn">Compress Image</button>
+            <div id="output"></div>
+        </section>
+        <aside class="adsense">
+            <!-- Google AdSense Code -->
+            <div class="adsense-unit">
+                <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-XXXXXX" <!-- Replace with your AdSense Client ID -->
+                     data-ad-slot="XXXXXX" <!-- Replace with your AdSense Ad Unit ID -->
+                     data-ad-format="auto"></ins>
+                <script>
+                     (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+        </aside>
+    </main>
+    <footer>
+        <p>&copy; 2025 Image Compression Tool</p>
+    </footer>
+</body>
+</html>
